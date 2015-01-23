@@ -1,10 +1,10 @@
 package weather.vieck.purdue.edu.weather;
 
-import android.app.Fragment;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +49,7 @@ public class Weather_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "fonts/weather.ttf");
+        weatherFont = Typeface.createFromAsset(getActivity().getAssets(), "weather/vieck/purdue/edu/weather/weather.ttf");
         updateWeatherData(new City(getActivity()).getCity());
     }
 
