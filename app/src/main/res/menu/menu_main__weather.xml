@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Main_Weather">
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/celsius_menu"
+        android:title="@string/celsius"
+        app:showAsAction="never"
+        android:orderInCategory="1" />
+    <item
+        android:id="@+id/fahrenheit_menu"
+        android:title="@string/fahrenheit"
+        android:orderInCategory="2"
         app:showAsAction="never" />
 </menu>
