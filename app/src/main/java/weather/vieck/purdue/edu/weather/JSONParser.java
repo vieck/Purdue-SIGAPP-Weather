@@ -1,86 +1,88 @@
 package weather.vieck.purdue.edu.weather;
 
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import weather.vieck.purdue.edu.weather.model.Location;
-import weather.vieck.purdue.edu.weather.model.Weather;
 
 /**
  * Created by Michael on 1/24/2015.
  */
 public class JSONParser {
+    protected static final String DEBUG_TAG = "Debug";
+    static int result_all, sunrise, sunset;
+    static double longitude, latitude, result_temp, result_pressure, result_humidity, result_temp_min, result_temp_max,
+            result_speed, result_degree;
+    static String country, weatherResult, result_wind, result_base;
 
-    public static Weather getWeather(String data) throws JSONException {
-        Weather weather = new Weather();
+    public static String decodeJSON(String JSON) throws JSONException {
+        String parsedResult = "";
+        JSONObject jsonObject = new JSONObject(JSON);
 
-        // We create out JSONObject from the data
-        JSONObject jObj = new JSONObject(data);
+        parsedResult += "Number of objects " + jsonObject.length() + "\n\n";
+        /**
+         * Coordinates
+         */
+        JSONObject jsonCoordinates = jsonObject.getJSONObject("coord");
+        longitude = jsonCoordinates.getDouble("lon");
+        latitude = jsonCoordinates.getDouble("lat");
+        /**
+         * Sys
+         */
+        JSONObject jsonSys = jsonObject.getJSONObject("sys");
+        country = jsonSys.getString("country");
+        sunrise = jsonSys.getInt("sunrise");
+        sunset = jsonSys.getInt("sunset");
+        /**
+         * Weather
+         */
+        weatherResult = "";
+        JSONArray arrayWeather = jsonObject.getJSONArray("weather");
+        if (arrayWeather.length() > 0) {
+            JSONObject jsonWeather = arrayWeather.getJSONObject(0);
+            int result_id = jsonWeather.getInt("id");
+            String result_main = jsonWeather.getString("main");
+            String result_description = jsonWeather.getString("description");
+            String result_icon = jsonWeather.getString("icon");
 
-        // We start extracting the info
-        Location loc = new Location();
-
-        JSONObject coordObj = getObject("coord", jObj);
-        loc.setLatitude(getFloat("lat", coordObj));
-        loc.setLongitude(getFloat("lon", coordObj));
-
-        JSONObject sysObj = getObject("sys", jObj);
-        loc.setCountry(getString("country", sysObj));
-        loc.setSunrise(getInt("sunrise", sysObj));
-        loc.setSunset(getInt("sunset", sysObj));
-        loc.setCity(getString("name", jObj));
-        weather.location = loc;
-
-        // We get weather info (This is an array)
-        JSONArray jArr = jObj.getJSONArray("weather");
-
-        // We use only the first value
-        JSONObject JSONWeather = jArr.getJSONObject(0);
-        weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
-        weather.currentCondition.setDescription(getString("description", JSONWeather));
-        weather.currentCondition.setCondition(getString("main", JSONWeather));
-        weather.currentCondition.setIcon(getString("icon", JSONWeather));
-
-        JSONObject mainObj = getObject("main", jObj);
-        weather.currentCondition.setHumidity(getInt("humidity", mainObj));
-        weather.currentCondition.setPressure(getInt("pressure", mainObj));
-        weather.temperature.setMaxTemp(getFloat("temp_max", mainObj));
-        weather.temperature.setMinTemp(getFloat("temp_min", mainObj));
-        weather.temperature.setTemp(getFloat("temp", mainObj));
-
-        // Wind
-        JSONObject wObj = getObject("wind", jObj);
-        weather.wind.setSpeed(getFloat("speed", wObj));
-        weather.wind.setDegrees(getFloat("deg", wObj));
-
-        // Clouds
-        JSONObject cObj = getObject("clouds", jObj);
-        weather.clouds.setPercent(getInt("all", cObj));
-
-        // We download the icon to show
+            weatherResult = "weather\tid: " + result_id + "\tmain: " + result_main + "\tdescription: "
+                    + result_description + "\ticon: " + result_icon;
+        } else {
+            Log.d(DEBUG_TAG, "weather array size is 0");
+        }
+        /**
+         * Base
+         */
+        result_base = jsonObject.getString("base");
+        /**
+         * Main
+         */
+        JSONObject jsonMain = jsonObject.getJSONObject("main");
+        result_temp = jsonMain.getDouble("temp");
+        result_pressure = jsonMain.getDouble("pressure");
+        result_humidity = jsonMain.getDouble("humidity");
+        result_temp_min = jsonMain.getDouble("temp_min");
+        result_temp_max = jsonMain.getDouble("temp_max");
+        /**
+         * Wind
+         */
+        JSONObject jsonWind = jsonObject.getJSONObject("wind");
+        result_speed = jsonWind.getDouble("speed");
+        result_degree = jsonWind.getDouble("deg");
+        result_wind = "wind\tspeed: " + result_speed + "\tdegree: " + result_degree;
+        /**
+         * Cloud Coverage
+         */
+        JSONObject jsonClouds = jsonObject.getJSONObject("clouds");
+        result_all = jsonClouds.getInt("all");
 
 
-        return weather;
+        return parsedResult;
     }
 
+    public void update() {
 
-    private static JSONObject getObject(String tagName, JSONObject jObj) throws JSONException {
-        JSONObject subObj = jObj.getJSONObject(tagName);
-        return subObj;
     }
-
-    private static String getString(String tagName, JSONObject jObj) throws JSONException {
-        return jObj.getString(tagName);
-    }
-
-    private static float getFloat(String tagName, JSONObject jObj) throws JSONException {
-        return (float) jObj.getDouble(tagName);
-    }
-
-    private static int getInt(String tagName, JSONObject jObj) throws JSONException {
-        return jObj.getInt(tagName);
-    }
-
 }
