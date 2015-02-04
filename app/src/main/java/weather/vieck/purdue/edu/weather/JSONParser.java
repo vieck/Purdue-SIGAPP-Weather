@@ -1,6 +1,7 @@
 package weather.vieck.purdue.edu.weather;
 
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -12,10 +13,11 @@ import org.json.JSONObject;
  */
 public class JSONParser {
     protected static final String DEBUG_TAG = "Debug";
-    static int result_all, sunrise, sunset;
+    static int result_all, sunrise, sunset, result_id;
     static double longitude, latitude, result_temp, result_pressure, result_humidity, result_temp_min, result_temp_max,
             result_speed, result_degree;
-    static String country, weatherResult, result_wind, result_base;
+    static String country, weatherResult, result_wind, result_base, result_icon;
+    public Drawable iconData;
 
     public static String decodeJSON(String JSON) throws JSONException {
         String parsedResult = "";
@@ -42,10 +44,10 @@ public class JSONParser {
         JSONArray arrayWeather = jsonObject.getJSONArray("weather");
         if (arrayWeather.length() > 0) {
             JSONObject jsonWeather = arrayWeather.getJSONObject(0);
-            int result_id = jsonWeather.getInt("id");
+            result_id = jsonWeather.getInt("id");
             String result_main = jsonWeather.getString("main");
             String result_description = jsonWeather.getString("description");
-            String result_icon = jsonWeather.getString("icon");
+            result_icon = jsonWeather.getString("icon");
 
             weatherResult = "weather\tid: " + result_id + "\tmain: " + result_main + "\tdescription: "
                     + result_description + "\ticon: " + result_icon;
@@ -82,7 +84,39 @@ public class JSONParser {
         return parsedResult;
     }
 
-    public void update() {
+    public void setIconData(Drawable iconData) {
+        this.iconData = iconData;
+    }
 
+    public Drawable getIconData() {
+        return iconData;
+    }
+
+    public double getResult_temp() {
+        return result_temp;
+    }
+
+    public double getResult_pressure() {
+        return result_pressure;
+    }
+
+    public double getResult_speed() {
+        return result_speed;
+    }
+
+    public double getResult_degree() {
+        return result_degree;
+    }
+
+    public double getResult_humidity() {
+        return result_humidity;
+    }
+
+    public int getResult_id() {
+        return result_id;
+    }
+
+    public String getResult_icon() {
+        return result_icon;
     }
 }

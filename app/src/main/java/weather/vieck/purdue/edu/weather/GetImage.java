@@ -1,49 +1,67 @@
 package weather.vieck.purdue.edu.weather;
 
-import java.io.ByteArrayOutputStream;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
  * Created by Michael on 1/29/2015.
  */
 public class GetImage {
-    private static String IMG_URL = "http://openweathermap.org/img/w/";
+    public Drawable downloadImage(String _url) {
+        //Prepare to download image
+        URL url;
+        BufferedOutputStream out;
+        InputStream in;
+        BufferedInputStream buf;
 
-    public byte[] getImage(String code) {
-        HttpURLConnection con = null;
-        InputStream is = null;
+        //BufferedInputStream buf;
         try {
-            con = (HttpURLConnection) (new URL(IMG_URL + code)).openConnection();
-            con.setRequestMethod("GET");
-            con.setDoInput(true);
-            con.setDoOutput(true);
-            con.connect();
+            url = new URL(_url);
+            in = url.openStream();
 
-            // Let's read the response
-            is = con.getInputStream();
-            byte[] buffer = new byte[1024];
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            /*
+             * THIS IS NOT NEEDED
+             *
+             * YOU TRY TO CREATE AN ACTUAL IMAGE HERE, BY WRITING
+             * TO A NEW FILE
+             * YOU ONLY NEED TO READ THE INPUTSTREAM
+             * AND CONVERT THAT TO A BITMAP
+            out = new BufferedOutputStream(new FileOutputStream("testImage.jpg"));
+            int i;
 
-            while (is.read(buffer) != -1)
-                baos.write(buffer);
+             while ((i = in.read()) != -1) {
+                 out.write(i);
+             }
+             out.close();
+             in.close();
+             */
 
-            return baos.toByteArray();
-        } catch (Throwable t) {
-            t.printStackTrace();
-        } finally {
-            try {
-                is.close();
-            } catch (Throwable t) {
+            // Read the inputstream
+            buf = new BufferedInputStream(in);
+
+            // Convert the BufferedInputStream to a Bitmap
+            Bitmap bMap = BitmapFactory.decodeStream(buf);
+            if (in != null) {
+                in.close();
             }
-            try {
-                con.disconnect();
-            } catch (Throwable t) {
+            if (buf != null) {
+                buf.close();
             }
+
+            return new BitmapDrawable(bMap);
+
+        } catch (Exception e) {
+            Log.e("Error reading file", e.toString());
         }
 
         return null;
-
     }
 }

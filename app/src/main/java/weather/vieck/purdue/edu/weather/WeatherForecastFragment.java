@@ -13,15 +13,15 @@ import android.widget.TextView;
  * Created by Michael on 1/29/2015.
  */
 public class WeatherForecastFragment extends Fragment {
-    public TextView cityText;
-    public TextView condDescr;
-    public TextView temp;
-    public TextView press;
-    public TextView windSpeed;
-    public TextView windDeg;
-    public TextView unitTemp;
-    public TextView hum;
-    public ImageView imgView;
+    public static TextView cityText;
+    public static TextView condDescr;
+    public static TextView temp;
+    public static TextView press;
+    public static TextView windSpeed;
+    public static TextView windDeg;
+    public static TextView unitTemp;
+    public static TextView hum;
+    public static ImageView imgView;
 
     @Nullable
     @Override
