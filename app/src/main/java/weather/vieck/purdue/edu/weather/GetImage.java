@@ -2,8 +2,6 @@ package weather.vieck.purdue.edu.weather;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -15,7 +13,7 @@ import java.net.URL;
  * Created by Michael on 1/29/2015.
  */
 public class GetImage {
-    public Drawable downloadImage(String _url) {
+    public Bitmap downloadImage(String _url) {
         //Prepare to download image
         URL url;
         BufferedOutputStream out;
@@ -56,7 +54,7 @@ public class GetImage {
                 buf.close();
             }
 
-            return new BitmapDrawable(bMap);
+            return bMap;
 
         } catch (Exception e) {
             Log.e("Error reading file", e.toString());

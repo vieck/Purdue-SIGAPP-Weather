@@ -1,7 +1,7 @@
 package weather.vieck.purdue.edu.weather;
 
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,7 +17,7 @@ public class JSONParser {
     static double longitude, latitude, result_temp, result_pressure, result_humidity, result_temp_min, result_temp_max,
             result_speed, result_degree;
     static String country, weatherResult, result_wind, result_base, result_icon;
-    public Drawable iconData;
+    private Bitmap iconData;
 
     public static String decodeJSON(String JSON) throws JSONException {
         String parsedResult = "";
@@ -84,11 +84,11 @@ public class JSONParser {
         return parsedResult;
     }
 
-    public void setIconData(Drawable iconData) {
+    public void setIconData(Bitmap iconData) {
         this.iconData = iconData;
     }
 
-    public Drawable getIconData() {
+    public Bitmap getIconData() {
         return iconData;
     }
 

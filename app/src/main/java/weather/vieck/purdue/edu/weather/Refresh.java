@@ -1,6 +1,6 @@
 package weather.vieck.purdue.edu.weather;
 
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -15,36 +15,38 @@ public class Refresh {
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private static byte[] byteArray;
 
-    static class JSONWeatherTask extends AsyncTask<String, WeatherForecastFragment, Void> {
+    static class JSONWeatherTask extends AsyncTask<String, WeatherForecastFragment, JSONParser> {
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected JSONParser doInBackground(String... params) {
             downloadJSON(currentWeather);
-            updateData();
-            return null;
+            JSONParser parser = updateData();
+            return parser;
         }
 
         @Override
-        protected void onPostExecute(Void parameter) {
-            updateUI();
+        protected void onPostExecute(JSONParser parser) {
+            updateUI(parser);
         }
     }
 
-    protected static void updateData() {
+    protected static JSONParser updateData() {
         JSONParser parserClass = new JSONParser();
         GetImage imageDownloader = new GetImage();
         String RESULT_ICON_STRING = parserClass.getResult_icon();
-        Drawable weatherConditionIcon = imageDownloader.downloadImage(IMG_URL + RESULT_ICON_STRING + ".png");
+        Bitmap weatherConditionIcon = imageDownloader.downloadImage(IMG_URL + RESULT_ICON_STRING + ".png");
         parserClass.setIconData(weatherConditionIcon);
         Log.d("Debug", "Image Bitmap URL: " + IMG_URL + RESULT_ICON_STRING + ".png");
+        return parserClass;
     }
 
-    protected static void updateUI() {
+    protected static void updateUI(JSONParser parserClass) {
         WeatherForecastFragment weatherFragment = new WeatherForecastFragment();
-        JSONParser parserClass = new JSONParser();
-        Drawable weatherConditionIcon = parserClass.getIconData();
+        Bitmap weatherConditionIcon = parserClass.getIconData();
+        Log.d("Debug", "Bitmap Null? :" + weatherConditionIcon);
         if (weatherConditionIcon != null) {
-            weatherFragment.imgView.setBackground(weatherConditionIcon);
+            Log.d("Debug", "Weather Icon Set");
+            weatherFragment.imgView.setImageBitmap(weatherConditionIcon);
         }
         weatherFragment.temp.setText("" + parserClass.getResult_temp());
         weatherFragment.hum.setText("" + parserClass.getResult_humidity());
