@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/units">
+
+        <ListPreference
+            android:entries="@array/temperature_array"
+            android:entryValues="@array/temperature_values"
+            android:key="@string/temp_key"
+            android:summary="Set the temperature to either fahrenheit or celsius"
+            android:title="@string/units"></ListPreference>
+
+    </PreferenceCategory>
+</PreferenceScreen>

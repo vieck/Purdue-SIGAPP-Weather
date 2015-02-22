@@ -16,7 +16,7 @@ public class JSONParser {
     static int result_all, sunrise, sunset, result_id;
     static double longitude, latitude, result_temp, result_pressure, result_humidity, result_temp_min, result_temp_max,
             result_speed, result_degree;
-    static String country, weatherResult, result_wind, result_base, result_icon;
+    static String country, weatherResult, result_wind, result_base, result_icon, result_description;
     private Bitmap iconData;
 
     public static String decodeJSON(String JSON) throws JSONException {
@@ -46,7 +46,7 @@ public class JSONParser {
             JSONObject jsonWeather = arrayWeather.getJSONObject(0);
             result_id = jsonWeather.getInt("id");
             String result_main = jsonWeather.getString("main");
-            String result_description = jsonWeather.getString("description");
+            result_description = jsonWeather.getString("description");
             result_icon = jsonWeather.getString("icon");
 
             weatherResult = "weather\tid: " + result_id + "\tmain: " + result_main + "\tdescription: "
@@ -88,28 +88,52 @@ public class JSONParser {
         this.iconData = iconData;
     }
 
+    public int getSunrise() {
+        return sunrise;
+    }
+
+    public int getSunset() {
+        return sunset;
+    }
+
     public Bitmap getIconData() {
         return iconData;
+    }
+
+    public int getResult_temp_min() {
+        return (int) result_temp_min;
+    }
+
+    public int getResult_temp_max() {
+        return (int) result_temp_max;
     }
 
     public double getResult_temp() {
         return result_temp;
     }
 
-    public double getResult_pressure() {
-        return result_pressure;
+    public String getResult_description() {
+        return result_description;
     }
 
-    public double getResult_speed() {
-        return result_speed;
+    public int getResult_pressure() {
+        return (int) result_pressure;
     }
 
-    public double getResult_degree() {
-        return result_degree;
+    public int getResult_speed() {
+        return (int) result_speed;
     }
 
-    public double getResult_humidity() {
-        return result_humidity;
+    public int getResult_degree() {
+        return (int) result_degree;
+    }
+
+    public int getResult_humidity() {
+        return (int) result_humidity;
+    }
+
+    public int getResult_all() {
+        return result_all;
     }
 
     public int getResult_id() {

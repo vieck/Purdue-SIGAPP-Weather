@@ -4,6 +4,10 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import static weather.vieck.purdue.edu.weather.ServerInput.downloadJSON;
 
 /**
@@ -48,10 +52,27 @@ public class Refresh {
             Log.d("Debug", "Weather Icon Set");
             weatherFragment.imgView.setImageBitmap(weatherConditionIcon);
         }
+        weatherFragment.minTemp.setText("" + parserClass.getResult_temp_min() + "℉");
+        weatherFragment.maxTemp.setText("" + parserClass.getResult_temp_max() + "℉");
+        weatherFragment.condDescr.setText("" + parserClass.getResult_description());
         weatherFragment.temp.setText("" + parserClass.getResult_temp());
-        weatherFragment.hum.setText("" + parserClass.getResult_humidity());
-        weatherFragment.press.setText("" + parserClass.getResult_pressure());
-        weatherFragment.windSpeed.setText("" + parserClass.getResult_speed());
-        weatherFragment.windDeg.setText("" + parserClass.getResult_degree());
+        weatherFragment.unitTemp.setText("℉");
+        weatherFragment.hum.setText("" + parserClass.getResult_humidity() + "%");
+        weatherFragment.press.setText("" + parserClass.getResult_pressure() + "° HPA");
+        weatherFragment.visibility.setText("" + parserClass.getResult_all() + "%");
+        weatherFragment.windSpeed.setText("" + parserClass.getResult_speed() + " mph");
+        weatherFragment.windDeg.setText("" + parserClass.getResult_degree() + "°");
+
+        long time = parserClass.getSunrise() * (long) 1000;
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss a yyyy");
+        format.setTimeZone(TimeZone.getTimeZone("EST"));
+        weatherFragment.sunrise.setText("" + format.format(date));
+
+        time = parserClass.getSunset() * (long) 1000;
+        date = new Date(time);
+        format = new SimpleDateFormat("EEE MMM dd HH:mm:ss a yyyy");
+        format.setTimeZone(TimeZone.getTimeZone("EST"));
+        weatherFragment.sunset.setText("" + format.format(date));
     }
 }
